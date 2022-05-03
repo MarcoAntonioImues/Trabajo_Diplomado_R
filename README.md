@@ -1,4 +1,4 @@
-## Título del trbajo
+## Título del trabajo
 Crecimiento poblacional de la microalga Chlorella vulgaris cultivada en fotobiorreactores
 
 ## Autor
