@@ -9,3 +9,4 @@ Se quiere determinar la curva de crecimiento de la microalga Chlorella vulgaris 
 
 ## Variables
 
+
