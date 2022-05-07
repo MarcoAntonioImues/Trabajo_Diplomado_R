@@ -16,13 +16,11 @@ library(psych)
 library(readxl)
 ```
 
-## *Variación de las variables de estudio*
-
-# Presentación de tablas de datos
+### **Presentación de tablas de datos**
 
 ```{r}
 Chlorella <- read_excel("Chlorella.xlsx", na="NA")
-Chlorella_mod <- na.omit(Chlorella_mod)
+Chlorella_mod <- na.omit(Chlorella)
 Chlorella_mod$FBR <- as.factor(Chlorella_mod$FBR)
 Chlorella_mod$Ciclo <- as.factor(Chlorella_mod$Ciclo)
 Chlorella_mod$Dias <- as.factor(Chlorella_mod$Dias)
@@ -35,13 +33,13 @@ table(Chlorella_mod$Dias)
 table(Chlorella_mod$Muestra)
 ```
 
-# Exploración gráfica: Histogramas
+### **Exploración gráfica: Histogramas**
 
 ```{r}
 Chlorella_mod <- data.frame(Chlorella_mod)
 ggplot(Chlorella_mod, aes(x=Densidad)) +
   geom_histogram(aes(color=FBR), bins=10) + 
-  labs(title = "Figura 1. Densidad celular (cel/ml)", y="Frecuencia")
+  labs(title = "Figura 1. Densidad celular (cel/ml)", x="Desnidad ceular (cel/ml)", y="Frecuencia")
 
 ggplot(Chlorella_mod, aes(x=TCS)) +
   geom_histogram(aes(color=FBR), bins=6, na.rm = TRUE) +
@@ -57,10 +55,10 @@ ggplot(Chlorella_mod, aes(x=CO2)) +
 
 ggplot(Chlorella_mod, aes(x=OD)) +
   geom_histogram(aes(color=FBR), bins=10) +
-  labs(title = "Figura 5. Oxígeno disuelto (mg/L)", y="Frecuencia")
+  labs(title = "Figura 5. Oxígeno disuelto (mg/L)", x="Oxígeno disuleto (mg/L)", y="Frecuencia")
 ```
 
-# Exploración gráfica: Diagrama de cajas y bigotes
+### **Exploración gráfica: Diagrama de cajas y bigotes**
 
 ```{r}
 ggplot(Chlorella_mod, aes(x=FBR, y=Densidad)) +
@@ -85,7 +83,7 @@ ggplot(Chlorella_mod, aes(x=FBR, y=OD)) +
 
 ```
 
-# Exploración gráfica: Distribución y relación entre variables
+### **Exploración gráfica: Distribución y relación entre variables**
 
 ```{r}
 ggplot(Chlorella_mod, aes(x=Temperatura, y=Densidad)) +
@@ -105,18 +103,19 @@ ggplot(Chlorella_mod, aes(x=OD, y=Densidad)) +
 
 ```
 
-# Exploración gráfica: Función de densidad y Función de probabilidad acumulada
+### **Exploración gráfica: Función de densidad y Función de probabilidad acumulada**
 
 ```{r}
 plot(density(Chlorella_mod$Densidad), main = "Figura 13. Función de densidad para la variable Densidad (cel/ml)", y="Densidad")
-plot(density(Chlorella_mod$Temperatura), main = "Figura 14. Función de densidad para la variable Temperatura (°C)", y="Densidad")
-plot(density(Chlorella_mod$CO2), main = "Figura 15. Función de densidad para la variable CO2 (mg/ml))", y="Densidad")
-plot(density(Chlorella_mod$OD), main = "Figura 16. Función de densidad para la variable Oxígeno disuelto (mg/ml)", y="Densidad")
+plot(density(Chlorella_mod$TCS), main = "Figura 14. Función de densidad para la variable Tasa de Crecimiento Simple", y="Densidad")
+plot(density(Chlorella_mod$Temperatura), main = "Figura 15. Función de densidad para la variable Temperatura (°C)", y="Densidad")
+plot(density(Chlorella_mod$CO2), main = "Figura 16. Función de densidad para la variable CO2 (mg/ml))", y="Densidad")
+plot(density(Chlorella_mod$OD), main = "Figura 17. Función de densidad para la variable Oxígeno disuelto (mg/ml)", y="Densidad")
 
-plot(ecdf(Chlorella_mod$Densidad), main = "Figura 17. Función de probabilidad acumulada para la variable Densidad (cel/ml)")
-plot(ecdf(Chlorella_mod$TCS), main = "Figura 18. Función de probabilidad acumulada para la variable Tasa de Crecimiento Simple")
-plot(ecdf(Chlorella_mod$Temperatura), main = "Figura 19. Función de probabilidad acumulada para la variable Temperatura")
-plot(ecdf(Chlorella_mod$CO2), main = "Figura 20. Función de probabilidad acumulada para la variable CO2")
-plot(ecdf(Chlorella_mod$OD), main = "Figura 21. Función de probabilidad acumulada para la variable Oxígeno Disuelto")
+plot(ecdf(Chlorella_mod$Densidad), main = "Figura 18. Función de probabilidad acumulada para la variable Densidad (cel/ml)")
+plot(ecdf(Chlorella_mod$TCS), main = "Figura 19. Función de probabilidad acumulada para la variable Tasa de Crecimiento Simple")
+plot(ecdf(Chlorella_mod$Temperatura), main = "Figura 20. Función de probabilidad acumulada para la variable Temperatura")
+plot(ecdf(Chlorella_mod$CO2), main = "Figura 21. Función de probabilidad acumulada para la variable CO2")
+plot(ecdf(Chlorella_mod$OD), main = "Figura 22. Función de probabilidad acumulada para la variable Oxígeno Disuelto")
 
 ```
