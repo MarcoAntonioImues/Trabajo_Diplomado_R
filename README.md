@@ -9,11 +9,11 @@ Se quiere determinar la curva de crecimiento de la microalga Chlorella vulgaris 
 
 ## Variables
 Se incluyen las siguientes variables:
-- Tipo de FBRT
-- Ciclo de cultivo
-- Días de cultivo
-- Densidad (cel/ml)
-- Tasa de crecimiento simple (TCS)
+- Tipo de FBRT (Factor)
+- Ciclo de cultivo (Factor)
+- Días de cultivo (Factor)
+- Densidad (cel/ml) (Variable dependiente)
+- Tasa de crecimiento simple (TCS) (Variable dependiente)
 - Temperatura (°C)
 - CO2 (mg/ml)
 - Oxígeno disuelto (OD mg/ml)
