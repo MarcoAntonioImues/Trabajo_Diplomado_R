@@ -63,22 +63,27 @@ ggplot(Chlorella_mod, aes(x=OD)) +
 ```{r}
 ggplot(Chlorella_mod, aes(x=FBR, y=Densidad)) +
   geom_boxplot(aes(fill=Ciclo)) +
+  geom_jitter(color="blue", size=1, alpha=2) +
   labs(title = "Figura 6. Densidad (cel/ml) agrupado por FBR y Ciclo", y="Densidad (cel/ml)")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=TCS)) +
   geom_boxplot(aes(fill=Ciclo), na.rm=TRUE) +
+  geom_jitter(color="blue", size=1, alpha=2) +
   labs(title = "Figura 7. Tasa de crecimiento simple (TCS) agrupado por FBR y Ciclo", y="TCS")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=Temperatura)) +
   geom_boxplot(aes(fill=Ciclo)) +
+  geom_jitter(color="blue", size=1, alpha=2) +
   labs(title = "Figura 8. Temperatura (°C) agrupado por FBR y Ciclo", y="Temperatura (°C)")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=CO2)) +
   geom_boxplot(aes(fill=Ciclo)) +
+  geom_jitter(color="blue", size=1, alpha=2) +
   labs(title = "Figura 9. CO2 (mg/L) agrupado por FBR y Ciclo", y="CO2 (mg/L)")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=OD)) +
   geom_boxplot(aes(fill=Ciclo)) +
+  geom_jitter(color="blue", size=1, alpha=2) +
   labs(title = "Figura 10. Oxígeno disuelto (mg/L) agrupado por FBR y Ciclo", y="OD (mg/L)")
 
 ```
@@ -118,4 +123,20 @@ plot(ecdf(Chlorella_mod$Temperatura), main = "Figura 20. Función de probabilida
 plot(ecdf(Chlorella_mod$CO2), main = "Figura 21. Función de probabilidad acumulada para la variable CO2")
 plot(ecdf(Chlorella_mod$OD), main = "Figura 22. Función de probabilidad acumulada para la variable Oxígeno Disuelto")
 
+```
+
+### **Correlación**
+
+```{r}
+pairs.panels(Chlorella_mod[,], smooth = TRUE, density = TRUE, method="pearson", font=2, main="Figura 23. Matriz de correlaciones")
+
+
+Tabla_Densidad <- Chlorella_mod %>% filter(FBR == "Helicoidal") %>%
+  summarize("Media" = mean(Densidad),
+            "SD" = sd(Densidad),
+            "Máximo" = max(Densidad),
+            "Mínimo" = min(Densidad))
+
+Densidad%>% 
+  mutate(Promedio_Densidad = mean(Densidad))
 ```
