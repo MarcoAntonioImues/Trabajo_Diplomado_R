@@ -16,6 +16,7 @@ library(psych)
 library(readxl)
 library(dplyr)
 library(tidyr)
+library(gridExtra)
 ```
 
 ## **Presentación de tablas de datos**
@@ -35,10 +36,10 @@ table(Chlorella_mod$Dias)
 table(Chlorella_mod$Muestra)
 
 Chlorella_mod <- data.frame(Chlorella_mod)
-knitr::kable(Chlorella_mod, digits = 6, caption = "Tabla 1. Cultivo de la microalga *Chlorella vulgarias* en FBRT")
+knitr::kable(head(Chlorella_mod), digits = 6, caption = "Tabla 1. Resumen de variables en el cultivo de la microalga *Chlorella vulgarias* en FBRT")
 
 Tabla_FBR <- Chlorella_mod %>% group_by(FBR) %>% 
-  summarize("Prom. Densidad"=mean(Densidad),
+  summarize("Prom. Densidad"= mean(Densidad),
             "SD Densidad"=sd(Densidad),
             "Prom. TCS" = mean(TCS),
             "SD TCS" = sd(TCS),
@@ -53,7 +54,7 @@ Tabla_FBR <- Chlorella_mod %>% group_by(FBR) %>%
 knitr::kable(Tabla_FBR, digits = 4, caption = "Tabla 2. Resumen de las variables en estudio por FBRT")
 
 Tabla_ciclo <- Chlorella_mod %>% group_by(Ciclo) %>% 
-  summarize("Prom. Densidad"=mean(Densidad),
+  summarize("Prom. Densidad"= mean(Densidad),
             "SD Densidad"=sd(Densidad),
             "Prom. TCS" = mean(TCS),
             "SD TCS" = sd(TCS),
@@ -65,39 +66,87 @@ Tabla_ciclo <- Chlorella_mod %>% group_by(Ciclo) %>%
             "SD CO2" = sd(CO2),
             n=n ())
 
-knitr::kable(Tabla_ciclo, digits = 4, caption = "Tabla 2. Resumen de las variables en estudio por ciclo de cultivo")
+knitr::kable(Tabla_ciclo, digits = 4, caption = "Tabla 3. Resumen de las variables en estudio por ciclo de cultivo")
 
+Tabla_FBR_ciclo <- Chlorella_mod %>% group_by(FBR, Ciclo) %>% 
+  summarize("Prom. Densidad"= mean(Densidad),
+            "SD Densidad"=sd(Densidad),
+            "Prom. TCS" = mean(TCS),
+            "SD TCS" = sd(TCS),
+            "Prom. Temp." = mean(Temperatura),
+            "SD Temp." = sd(Temperatura),
+            "Prom. OD" = mean (OD),
+            "SD OD" = sd(OD),
+            "Prom. CO2" = mean(CO2),
+            "SD CO2" = sd(CO2),
+            n=n ())
+
+knitr::kable(Tabla_FBR_ciclo, digits = 4, caption = "Tabla 4. Resumen de las variables en estudio por FBR y ciclo de cultivo")
+
+Tabla_FBR_muestra <- Chlorella_mod %>% group_by(FBR, Muestra) %>% 
+  summarize("Prom. Densidad"= mean(Densidad),
+            "SD Densidad"=sd(Densidad),
+            "Prom. TCS" = mean(TCS),
+            "SD TCS" = sd(TCS),
+            "Prom. Temp." = mean(Temperatura),
+            "SD Temp." = sd(Temperatura),
+            "Prom. OD" = mean (OD),
+            "SD OD" = sd(OD),
+            "Prom. CO2" = mean(CO2),
+            "SD CO2" = sd(CO2),
+            n=n ())
+
+knitr::kable(Tabla_FBR_muestra, digits = 4, caption = "Tabla 5. Resumen de las variables en estudio por FBR y muestra")
 ```
 
 ## **Exploración gráfica:** 
+
 ### **Histogramas**
 
 ```{r}
 Chlorella_mod <- data.frame(Chlorella_mod)
-ggplot(Chlorella_mod, aes(x=Densidad)) +
-  geom_histogram(aes(color=FBR), bins=10) + 
-  labs(title = "Figura 1. Densidad celular (cel/ml)", x="Desnidad ceular (cel/ml)", y="Frecuencia")
-
-ggplot(Chlorella_mod, aes(x=TCS)) +
-  geom_histogram(aes(color=FBR), bins=6, na.rm = TRUE) +
-  labs(title = "Figura 2. Tasa de crecimiento simple (TCS)", y="Frecuencia")
-
-ggplot(Chlorella_mod, aes(x=Temperatura)) +
-  geom_histogram(aes(color=FBR), bins=10) +
-  labs(title = "Figura 3. Temperatura promedio diario (°C)", y="Frecuencia")
-
-ggplot(Chlorella_mod, aes(x=CO2)) +
-  geom_histogram(aes(color=FBR), bins=10) +
-  labs(title = "Figura 4. CO2 (mg/L)", y="Frecuencia")
-
-ggplot(Chlorella_mod, aes(x=OD)) +
-  geom_histogram(aes(color=FBR), bins=10) +
-  labs(title = "Figura 5. Oxígeno disuelto (mg/L)", x="Oxígeno disuleto (mg/L)", y="Frecuencia")
-
-ggplot(Tabla_FBR, aes(x = FBR, y = Tabla_FBR$"Prom. Densidad"))+
-  geom_col()+
-  labs(title = "Figura 6. Promedio de la variable Densidad por FBR", x="Tipos de Fotobiorreactores", y = "Densidad (cel/ml)")
+hist1 <- ggplot(Chlorella_mod, aes(x = Densidad)) +
+  geom_histogram(bins = 10, colour = "blue", alpha = 0.3) +
+  labs(y = "Frecuencia")
   
+hist2 <- ggplot(Chlorella_mod, aes(x = TCS)) +
+  geom_histogram(bins = 10, na.rm = TRUE, colour = "blue", alpha = 0.3) +
+  labs(y = "Frecuencia")
+  
+hist3 <- ggplot(Chlorella_mod, aes(x = Temperatura)) +
+  geom_histogram(bins = 10, colour = "blue", alpha = 0.3) +
+  labs(y = "Frecuencia")
+  
+hist4 <- ggplot(Chlorella_mod, aes(x = CO2)) +
+  geom_histogram(bins = 10, colour = "blue", alpha = 0.3) +
+  labs(y = "Frecuencia")
+  
+hist5 <- ggplot(Chlorella_mod, aes(x = OD)) +
+  geom_histogram(bins = 10, colour="blue", alpha = 0.3) + 
+  labs(y = "Frecuencia")
+
+hist6 <- ggplot(Tabla_FBR, aes(x = FBR, y = `Prom. Densidad`))+
+  geom_col(colour="blue", alpha = 0.3) + labs(y = "Densidad (cel/ml)")
+
+grid.arrange(hist1, hist2, hist3, hist4, hist5, hist6)
+
+```
+
+### **Función de densidad y Función de probabilidad acumulada**
+
+```{r}
+plot(density(Chlorella_mod$Densidad), main = "Figura 2. Función de densidad para la variable Densidad (cel/ml)", y="Densidad")
+plot(density(Chlorella_mod$TCS), main = "Figura 3. Función de densidad para la variable Tasa de Crecimiento Simple", y="Densidad")
+plot(density(Chlorella_mod$Temperatura), main = "Figura 4. Función de densidad para la variable Temperatura (°C)", y="Densidad")
+plot(density(Chlorella_mod$CO2), main = "Figura 5. Función de densidad para la variable CO2 (mg/ml))", y="Densidad")
+plot(density(Chlorella_mod$OD), main = "Figura 6. Función de densidad para la variable Oxígeno disuelto (mg/ml)", y="Densidad")
+
+plot(ecdf(Chlorella_mod$Densidad), main = "Figura 7. Función de probabilidad acumulada para la variable Densidad (cel/ml)")
+plot(ecdf(Chlorella_mod$TCS), main = "Figura 8. Función de probabilidad acumulada para la variable Tasa de Crecimiento Simple")
+plot(ecdf(Chlorella_mod$Temperatura), main = "Figura 9. Función de probabilidad acumulada para la variable Temperatura")
+plot(ecdf(Chlorella_mod$CO2), main = "Figura 10. Función de probabilidad acumulada para la variable CO2")
+plot(ecdf(Chlorella_mod$OD), main = "Figura 11. Función de probabilidad acumulada para la variable Oxígeno Disuelto")
+
 ```
 
 ### **Diagrama de cajas y bigotes**
@@ -106,70 +155,55 @@ ggplot(Tabla_FBR, aes(x = FBR, y = Tabla_FBR$"Prom. Densidad"))+
 ggplot(Chlorella_mod, aes(x=FBR, y=Densidad)) +
   geom_boxplot(aes(fill=Ciclo)) +
   geom_jitter(color="blue", size=1, alpha=2) +
-  labs(title = "Figura 7. Densidad (cel/ml) agrupado por FBR y Ciclo", y="Densidad (cel/ml)")
+  labs(title = "Figura 12. Densidad (cel/ml) agrupado por FBR y Ciclo", y="Densidad (cel/ml)")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=TCS)) +
   geom_boxplot(aes(fill=Ciclo), na.rm=TRUE) +
   geom_jitter(color="blue", size=1, alpha=2) +
-  labs(title = "Figura 8. Tasa de crecimiento simple (TCS) agrupado por FBR y Ciclo", y="TCS")
+  labs(title = "Figura 13. Tasa de crecimiento simple (TCS) agrupado por FBR y Ciclo", y="TCS")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=Temperatura)) +
   geom_boxplot(aes(fill=Ciclo)) +
   geom_jitter(color="blue", size=1, alpha=2) +
-  labs(title = "Figura 9. Temperatura (°C) agrupado por FBR y Ciclo", y="Temperatura (°C)")
+  labs(title = "Figura 14. Temperatura (°C) agrupado por FBR y Ciclo", y="Temperatura (°C)")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=CO2)) +
   geom_boxplot(aes(fill=Ciclo)) +
   geom_jitter(color="blue", size=1, alpha=2) +
-  labs(title = "Figura 10. CO2 (mg/L) agrupado por FBR y Ciclo", y="CO2 (mg/L)")
+  labs(title = "Figura 15. CO2 (mg/L) agrupado por FBR y Ciclo", y="CO2 (mg/L)")
 
 ggplot(Chlorella_mod, aes(x=FBR, y=OD)) +
   geom_boxplot(aes(fill=Ciclo)) +
   geom_jitter(color="blue", size=1, alpha=2) +
-  labs(title = "Figura 11. Oxígeno disuelto (mg/L) agrupado por FBR y Ciclo", y="OD (mg/L)")
+  labs(title = "Figura 16. Oxígeno disuelto (mg/L) agrupado por FBR y Ciclo", y="OD (mg/L)")
 
 ```
 
 ### **Distribución y relación entre variables**
 
 ```{r}
-ggplot(Chlorella_mod, aes(x=Temperatura, y=Densidad)) +
+geom_point1 <- ggplot(Chlorella_mod, aes(x=Temperatura, y=Densidad)) +
   geom_point(aes(color=FBR)) +
   geom_smooth(span=0.2) +
-  labs(title = "Figura 12. Relación entre Temperatura (°C) y Densidad (cel/ml) agrupadas por FBR")
+  labs(title = "Figura 17. Relación entre Temperatura (°C) y Densidad (cel/ml) agrupadas por FBR")
 
-ggplot(Chlorella_mod, aes(x=CO2, y=Densidad)) +
+geom_point2 <- ggplot(Chlorella_mod, aes(x=CO2, y=Densidad)) +
   geom_point(aes(color=FBR)) +
   geom_smooth(span=0.2) +
-  labs(title = "Figura 13. Relación entre CO2 (mg/L) y Densidad (cel/ml) agrupadas por FBR")
+  labs(title = "Figura 18. Relación entre CO2 (mg/L) y Densidad (cel/ml) agrupadas por FBR")
 
-ggplot(Chlorella_mod, aes(x=OD, y=Densidad)) +
+geom_point3 <- ggplot(Chlorella_mod, aes(x=OD, y=Densidad)) +
   geom_point(aes(color=FBR)) +
   geom_smooth(span=0.2) +
-  labs(title = "Figura 14. Relación entre Oxígeno disuelto (mg/l) y Densidad (cel/ml) agrupadas por FBR")
+  labs(title = "Figura 19. Relación entre Oxígeno disuelto (mg/l) y Densidad (cel/ml) agrupadas por FBR")
 
-```
-
-### **Función de densidad y Función de probabilidad acumulada**
-
-```{r}
-plot(density(Chlorella_mod$Densidad), main = "Figura 15. Función de densidad para la variable Densidad (cel/ml)", y="Densidad")
-plot(density(Chlorella_mod$TCS), main = "Figura 16. Función de densidad para la variable Tasa de Crecimiento Simple", y="Densidad")
-plot(density(Chlorella_mod$Temperatura), main = "Figura 17. Función de densidad para la variable Temperatura (°C)", y="Densidad")
-plot(density(Chlorella_mod$CO2), main = "Figura 18. Función de densidad para la variable CO2 (mg/ml))", y="Densidad")
-plot(density(Chlorella_mod$OD), main = "Figura 19. Función de densidad para la variable Oxígeno disuelto (mg/ml)", y="Densidad")
-
-plot(ecdf(Chlorella_mod$Densidad), main = "Figura 20. Función de probabilidad acumulada para la variable Densidad (cel/ml)")
-plot(ecdf(Chlorella_mod$TCS), main = "Figura 21. Función de probabilidad acumulada para la variable Tasa de Crecimiento Simple")
-plot(ecdf(Chlorella_mod$Temperatura), main = "Figura 22. Función de probabilidad acumulada para la variable Temperatura")
-plot(ecdf(Chlorella_mod$CO2), main = "Figura 23. Función de probabilidad acumulada para la variable CO2")
-plot(ecdf(Chlorella_mod$OD), main = "Figura 24. Función de probabilidad acumulada para la variable Oxígeno Disuelto")
-
+grid.arrange(geom_point1, geom_point2, geom_point3, ncol = 1, nrow = 3)
 ```
 
 ### **Correlación**
 
 ```{r}
-pairs.panels(Chlorella_mod[,], smooth = TRUE, density = TRUE, method="pearson", font=2, main="Figura 25. Matriz de correlaciones")
+Tabla_correlacion <- select(Chlorella_mod, Densidad, TCS, Temperatura, CO2, OD)
+pairs.panels(Tabla_correlacion[,], smooth = TRUE, density = TRUE, method="pearson", font=1, main="Figura 20. Matriz de correlaciones")
 ```
 
